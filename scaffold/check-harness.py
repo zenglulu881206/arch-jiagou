@@ -7,7 +7,7 @@ harness 机器自检：把 SKILL.md 第 7 步能机器判定的项变成脚本�
 检查项：
 1. 必备文件齐全（按 SELECTION 判断前端/后端/架构图九幅）。
 2. 文档无残留占位符 {{…}} / __XXX__。
-3. 根 AGENTS.md 第一章是「0. 按需加载」，链到 docs/架构图/README.md，并声明叠加 ~/AGENTS.md + 继承铁律摘要。
+3. 根 AGENTS.md 第一章是「0. 按需加载」，链到架构图；必须存在 agent/AGENTS-继承准则.md（§2/§3/§4 全文）并在根登记。
 4. 分层 AGENT 含对应模板的全部二级标题（模板是唯一标准，禁止缩成摘要）。
 5. 脚手架增量目录：overlay 里的每个目录在项目里真实存在，且在对应 AGENT 里有登记。
 6. 架构图：Mermaid 围栏首行是合法图类型；索引每幅图有状态（测试骨架/骨架/与现状一致/过期/N/A）。
@@ -28,6 +28,7 @@ TEMPLATES = SKILL / "templates"
 OVERLAY = SKILL / "scaffold" / "overlay"
 
 LAYER_AGENTS = {
+    # 继承准则用 check_root 做全文锚点检查（含 {{USER_ADDRESS}} 替换后标题会变，不走进分层标题全等）
     "agent/AGENTS-前端.md": "AGENTS.frontend.md",
     "agent/AGENTS-后端.md": "AGENTS.backend.md",
     "agent/AGENTS-数据.md": "AGENTS.data.md",
@@ -80,6 +81,7 @@ def harness_docs(root: Path):
 
 def check_required(root: Path, sel: dict):
     required = ["AGENTS.md", "SELECTION.md", "docs/项目特化/README.md", "docs/架构图/README.md",
+                "agent/AGENTS-继承准则.md",
                 "agent/AGENTS-数据.md", "agent/AGENTS-测试.md", "agent/AGENTS-研发流程.md"]
     if sel.get("frontend"):
         required.append("agent/AGENTS-前端.md")
@@ -110,12 +112,25 @@ def check_root(root: Path):
         fail("[根 AGENTS] 第一章不是「0. 按需加载」")
     if "docs/架构图/README.md" not in text:
         fail("[根 AGENTS] 未链到 docs/架构图/README.md")
-    # 与 ~/AGENTS.md 结合：声明叠加 + 继承摘要（禁止只写一句指针）
-    if "~/AGENTS.md" not in text:
-        fail("[根 AGENTS] 未声明与全局 ~/AGENTS.md 叠加")
-    inherit_ok = ("继承" in text and ("铁律" in text or "小闭环" in text)) or "0.2 与全局" in text
-    if not inherit_ok:
-        fail("[根 AGENTS] 缺「与全局叠加 / 继承铁律摘要」专节（见 global-agents.md / 根模板 0.2）")
+    # §2/§3/§4 完整继承：必须落盘全文文件，禁止摘要冒充
+    inherited = root / "agent/AGENTS-继承准则.md"
+    if not inherited.exists():
+        fail("[完整继承] 缺 agent/AGENTS-继承准则.md（§2/§3/§4 全文）")
+    else:
+        it = read(inherited)
+        for needle, label in [
+            ("多 Agent 工作流", "§2 多 Agent"),
+            ("全局行为准则", "§3 行为铁律"),
+            ("通用编码准则", "§4 编码准则"),
+            ("小闭环", "§3.15 小闭环"),
+            ("外科手术式改动", "§4.3 手术刀"),
+        ]:
+            if needle not in it:
+                fail(f"[完整继承] AGENTS-继承准则.md 缺少{label}（疑似被缩成摘要）")
+    if "AGENTS-继承准则.md" not in text:
+        fail("[根 AGENTS] 按需加载/正文未登记 agent/AGENTS-继承准则.md")
+    if "0.2" not in text and "完整继承" not in text:
+        fail("[根 AGENTS] 缺 §0.2 经验准则完整继承说明")
 
 
 def check_layer_depth(root: Path):

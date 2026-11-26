@@ -11,6 +11,7 @@
 | 侧车（开了才有） | 分工边界 + 目录树 + 存放路径 + 调用约定 + 交付编译 | [templates/AGENTS.sidecar.md](templates/AGENTS.sidecar.md) |
 | 轻后端（原型才有） | 适用边界 + 目录树 + 存放路径 + 数据约定 + 升级信号 | [templates/AGENTS.light.md](templates/AGENTS.light.md) |
 | 研发流程 | 路径选择 + 阶段表 + 访谈默认 + PRD 分档 + 完成审查清单 + 文档落点（AGENT/PRD/特化） | [templates/AGENTS.workflow.md](templates/AGENTS.workflow.md) |
+| **继承准则** | §2 多 Agent + §3 铁律 + §4 编码准则 **全文**（随 skill 发布） | [templates/AGENTS.inherited.md](templates/AGENTS.inherited.md) → 项目 `agent/AGENTS-继承准则.md` |
 
 生成时 **整份采用对应模板**，按项目替换占位符；禁止缩成摘要后再声称 harness 完成。
 
@@ -28,4 +29,4 @@
 
 复用与手术刀原则见 [surgical-reuse.md](surgical-reuse.md)。
 
-根 AGENTS 须含全局叠加与继承铁律摘要，见 [global-agents.md](global-agents.md)。
+根 AGENTS 须登记并完整继承 §2–4，见 [global-agents.md](global-agents.md)、[templates/AGENTS.inherited.md](templates/AGENTS.inherited.md)。

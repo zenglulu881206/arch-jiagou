@@ -16,8 +16,7 @@ disable-model-invocation: true
 ## 身份与顾问立场（硬闸门）
 
 称呼、不附和、先判后答、按场景切换专家身份，遵循全局 `~/AGENTS.md`。
-**Harness 结合全局**：生成项目约束时按 [global-agents.md](global-agents.md)——声明叠加、写入继承铁律摘要、多 Agent/小闭环/沙箱/生产只读等落到根 AGENTS 与研发流程 AGENT；**禁止**把全局全文复制进项目（防平行漂移）。
-根 `AGENTS.md` 顾问立场与继承摘要必须按模板落盘，供只读项目树的 agent 遵守。
+**Harness 完整继承 §2/§3/§4**：按 [global-agents.md](global-agents.md) 将 [templates/AGENTS.inherited.md](templates/AGENTS.inherited.md) **全文**写入项目 `agent/AGENTS-继承准则.md`（替换称呼占位）。使 GitHub 安装本 skill 的用户无需作者本机 `~/AGENTS.md` 也能继承多 Agent、行为铁律、编码准则。§1 称呼已在顾问立场覆盖。作者本机全局若有，仅叠加、并须同轮同步进 inherited 模板。
 
 ## 目标清晰与根因优先（硬闸门）
 
@@ -106,6 +105,7 @@ disable-model-invocation: true
 | 文件 | 何时生成 |
 |---|---|
 | `AGENTS.md` | 始终 |
+| `agent/AGENTS-继承准则.md` | **始终**（§2/§3/§4 全文，模板 `AGENTS.inherited.md`） |
 | `agent/AGENTS-前端.md` | 有独立前端 |
 | `agent/AGENTS-后端.md` | 有独立后端 |
 | `agent/AGENTS-侧车.md` | 开了 Python 侧车（`backend.sidecar`） |
@@ -118,7 +118,7 @@ disable-model-invocation: true
 
 分层 AGENT 深度见 [scaffold.md](scaffold.md)：**前端/后端/测试/数据/研发流程**均须整份采用对应模板（目录或类别表 + 存放路径 + 禁令），禁止缩成摘要。前端另须含工程横切表（见 [frontend-engineering.md](frontend-engineering.md)），后端另须含工程横切表（见 [backend-engineering.md](backend-engineering.md)）。
 
-根文件必须：**0. 按需加载表**（含全局 `~/AGENTS.md` 一行）、**0.2 全局叠加与继承铁律摘要**（见 [global-agents.md](global-agents.md)）、文档唯一入口表（含 `docs/架构图/README.md`）、技术边界、顾问立场、指向分层 AGENT。
+根文件必须：**0. 按需加载表**（含 `agent/AGENTS-继承准则.md`）、**0.2 经验准则完整继承**、文档唯一入口、技术边界、顾问立场、指向分层 AGENT。继承准则须为 §2/§3/§4 **全文**（见 [global-agents.md](global-agents.md)、[templates/AGENTS.inherited.md](templates/AGENTS.inherited.md)），禁止摘要冒充。
 按需加载表必须含：分层 AGENT、架构图、双说明书、已有金样 PRD、测试/流程/admin；大文件写明 grep 再读。
 
 **禁止静默覆盖**：目标已有 `AGENTS.md` 时，先 diff 报告，经鲁大师确认再写。
@@ -146,7 +146,7 @@ ERP 类：根 AGENTS 写入**流程族 A–H 摘要**（或指针 [flow-family.m
 - [ ] **架构图目录齐**：必出齐全或 N/A 有理由；无残留 `{{`；Mermaid 可渲染
 - [ ] **架构图质量**：索引状态诚实；未把 `测试骨架`/`骨架` 写成「全部通过」；生产开发须持续推到 `与现状一致`
 - [ ] 根 AGENTS 链到架构图索引；活文档规则已登记（见 living-docs）
-- [ ] **全局结合**：根 AGENTS 声明叠加 `~/AGENTS.md` + 继承铁律摘要；研发流程含多 Agent 摘要；未整份抄全局
+- [ ] **完整继承**：已生成 `agent/AGENTS-继承准则.md`（§2/§3/§4 全文）；根按需加载已登记；非摘要
 - [ ] 无平行副本（同一约束只一处）
 - [ ] admin / 运行时边界与容器图、部署图一致
 - [ ] 分层路径与后端/前端图一致
