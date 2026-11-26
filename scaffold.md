@@ -27,3 +27,5 @@
 架构 Agent 只放可复用约束；词表/ROLE 细表/脚本清单正文 → `docs/项目特化/`。
 
 复用与手术刀原则见 [surgical-reuse.md](surgical-reuse.md)。
+
+根 AGENTS 须含全局叠加与继承铁律摘要，见 [global-agents.md](global-agents.md)。

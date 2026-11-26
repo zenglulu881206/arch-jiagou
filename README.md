@@ -61,6 +61,7 @@ python3 $S/scaffold/verify.py --selection $S/examples/dry-run-acme-quote/SELECTI
 | `axes.md` / `archetypes.md` | 13 个决策轴 / 6 个原型 |
 | `diagrams/` | 9 幅标准架构图模板与质量闸门 |
 | `templates/` | 分层 AGENT 模板 |
+| `global-agents.md` | 与 `~/AGENTS.md` 叠加结合：映射、继承摘要、禁止全文拷贝 |
 | `scaffold/` | 脚手架说明、overlay 增量、`init.py` / `verify.py` / `check-harness.py` |
 | 其余 `*.md` | 专册：流程族、模块金样、双说明书、数据保护、前后端工程横切、Web Push、测试验收、活文档等 |
 | `examples/` | 绿场演练（acme-quote）与样板 ERP 金样说明 |

@@ -9,6 +9,7 @@
 | 文件 | 何时读 |
 |---|---|
 | `SKILL.md` | 点名本 skill 后始终先读 |
+| `global-agents.md` | 生成/审查 harness 与全局 `~/AGENTS.md` 结合时 |
 | `archetypes.md` | 定场景 / 锁原型 |
 | `interview.md` | 第 2 步访谈；写 SELECTION.json 时 |
 | `scaffold/vue3.md` / `scaffold/goframe.md` | 第 6.5 步生成脚手架；写前后端 AGENT 目录树时 |
@@ -47,7 +48,8 @@
 
 ## B. 生成的项目 harness（必须落表）
 
-根 `AGENTS.md` **第一章必须是「0. 按需加载」表**，列：文件 | 职责 | 何时读。
+根 `AGENTS.md` **第一章必须是「0. 按需加载」表**，列：文件 | 职责 | 何时读；表内须含全局 `~/AGENTS.md` 一行。
+根文件还须有「与全局叠加 / 继承铁律摘要」节（见 templates + global-agents.md）。
 
 硬要求：
 

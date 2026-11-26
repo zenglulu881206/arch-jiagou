@@ -7,7 +7,7 @@ harness 机器自检：把 SKILL.md 第 7 步能机器判定的项变成脚本�
 检查项：
 1. 必备文件齐全（按 SELECTION 判断前端/后端/架构图九幅）。
 2. 文档无残留占位符 {{…}} / __XXX__。
-3. 根 AGENTS.md 第一章是「0. 按需加载」，且链到 docs/架构图/README.md。
+3. 根 AGENTS.md 第一章是「0. 按需加载」，链到 docs/架构图/README.md，并声明叠加 ~/AGENTS.md + 继承铁律摘要。
 4. 分层 AGENT 含对应模板的全部二级标题（模板是唯一标准，禁止缩成摘要）。
 5. 脚手架增量目录：overlay 里的每个目录在项目里真实存在，且在对应 AGENT 里有登记。
 6. 架构图：Mermaid 围栏首行是合法图类型；索引每幅图有状态（测试骨架/骨架/与现状一致/过期/N/A）。
@@ -110,6 +110,12 @@ def check_root(root: Path):
         fail("[根 AGENTS] 第一章不是「0. 按需加载」")
     if "docs/架构图/README.md" not in text:
         fail("[根 AGENTS] 未链到 docs/架构图/README.md")
+    # 与 ~/AGENTS.md 结合：声明叠加 + 继承摘要（禁止只写一句指针）
+    if "~/AGENTS.md" not in text:
+        fail("[根 AGENTS] 未声明与全局 ~/AGENTS.md 叠加")
+    inherit_ok = ("继承" in text and ("铁律" in text or "小闭环" in text)) or "0.2 与全局" in text
+    if not inherit_ok:
+        fail("[根 AGENTS] 缺「与全局叠加 / 继承铁律摘要」专节（见 global-agents.md / 根模板 0.2）")
 
 
 def check_layer_depth(root: Path):
