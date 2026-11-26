@@ -1,0 +1,7 @@
+# gf 开发工具配置，只在开发机用（gf gen dao 等）。密码在本机替换 CHANGE_ME，不提交真实凭据。
+# https://goframe.org/docs/cli
+gfcli:
+  gen:
+    dao:
+      - link: "__DB_LINK__"
+        descriptionTag: true

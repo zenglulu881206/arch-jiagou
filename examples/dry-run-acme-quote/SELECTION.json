@@ -1,0 +1,83 @@
+{
+  "identity": {
+    "address": "鲁大师",
+    "language": "简体中文",
+    "expert_roles": [
+      "贸易业务",
+      "报价流程"
+    ],
+    "audience": "业务员与主管，非技术人员"
+  },
+  "project": {
+    "name": "acme-quote",
+    "title": "报价管理"
+  },
+  "archetype": "erp-go-vue-pg",
+  "deploy": {
+    "site": "customer",
+    "tenancy": "single",
+    "network": "offline",
+    "envs": [
+      "dev",
+      "prod"
+    ],
+    "os": "linux",
+    "os_version": "22.04",
+    "shape": "nginx-split",
+    "nginx": true,
+    "domain": "",
+    "https": false,
+    "service": "systemd",
+    "one_click": true,
+    "upgrade": "keep-config-merge"
+  },
+  "scale": {
+    "users": "10",
+    "concurrency": "low"
+  },
+  "code_protection": "go-binary",
+  "clients": {
+    "pc": true,
+    "mobile": "h5",
+    "device": [],
+    "browser_min": "chrome-109"
+  },
+  "license": {
+    "enabled": true,
+    "bind": "machine",
+    "expire": true,
+    "modules": false,
+    "issuer": "admin"
+  },
+  "ai": {
+    "enabled": false,
+    "mode": "none"
+  },
+  "admin_zone": true,
+  "frontend": {
+    "dir": "vue",
+    "port": 15600,
+    "create_vue": "3.24.0",
+    "features": [
+      "ts",
+      "router",
+      "eslint",
+      "prettier"
+    ],
+    "element_plus": "2.14.8"
+  },
+  "backend": {
+    "dir": "server",
+    "module": "acme-quote",
+    "port": 18600,
+    "goframe": "v2.10.5",
+    "keep_docker": false,
+    "keep_kustomize": false,
+    "sidecar": false
+  },
+  "database": {
+    "engine": "pgsql",
+    "name": "acme_quote",
+    "user": "acme_quote"
+  }
+}

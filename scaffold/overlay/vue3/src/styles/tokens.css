@@ -1,0 +1,15 @@
+/* 设计令牌唯一入口：颜色、间距、字号、圆角、壳尺寸。页面与组件只引用变量，不写死色值。 */
+:root {
+  --app-color-page: #f5f7fa;
+  --app-color-surface: #ffffff;
+  --app-color-border: #e4e7ed;
+  --app-color-text: #303133;
+
+  --app-space-md: 12px;
+  --app-space-lg: 16px;
+
+  --app-font-size-lg: 16px;
+  --app-radius: 6px;
+
+  --app-header-height: 56px;
+}

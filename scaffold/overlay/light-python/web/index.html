@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>__LIGHT_TITLE__</title>
+  <style>
+    /* 设计令牌：页面只引用变量，不写死色值 */
+    :root {
+      --color-page: #f5f7fa;
+      --color-surface: #ffffff;
+      --color-border: #e4e7ed;
+      --color-text: #303133;
+      --color-primary: #409eff;
+      --color-danger: #f56c6c;
+      --space: 16px;
+      --radius: 6px;
+    }
+    body { margin: 0; background: var(--color-page); color: var(--color-text); font: 15px/1.6 system-ui, sans-serif; }
+    .page { max-width: 720px; margin: 0 auto; padding: var(--space); }
+    .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space); }
+    textarea { box-sizing: border-box; width: 100%; min-height: 160px; padding: 8px; border: 1px solid var(--color-border); border-radius: var(--radius); font: inherit; }
+    button { margin-top: 12px; padding: 8px 20px; border: 0; border-radius: var(--radius); background: var(--color-primary); color: #fff; font: inherit; cursor: pointer; }
+    button:disabled { opacity: 0.6; cursor: default; }
+    .status { margin-left: 12px; }
+    .status.error { color: var(--color-danger); }
+    @media (max-width: 600px) { .page { padding: 8px; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>__LIGHT_TITLE__</h1>
+    <section class="card">
+      <label for="memo">备忘</label>
+      <textarea id="memo" data-test="memo-text" placeholder="写点什么"></textarea>
+      <button id="save" data-test="memo-save">保存</button>
+      <span id="status" class="status" data-test="memo-status"></span>
+    </section>
+  </main>
+  <script>
+    /**
+     * 全页唯一请求入口：所有接口都经这里；出错时抛出后端给的中文文案。
+     * 新功能的数据按业务分 key 存取（如 contracts、invoices），key 只用小写字母、数字、下划线。
+     */
+    async function api(method, key, value) {
+      const init = { method }
+      if (value !== undefined) {
+        init.body = JSON.stringify(value)
+        init.headers = { 'Content-Type': 'application/json' }
+      }
+      let res
+      try {
+        res = await fetch('/api/store/' + key, init)
+      } catch {
+        throw new Error('网络异常，请稍后重试')
+      }
+      const body = await res.json()
+      if (!res.ok) throw new Error(body.error || '保存失败，请稍后重试')
+      return body.value
+    }
+
+    const memo = document.getElementById('memo')
+    const save = document.getElementById('save')
+    const status = document.getElementById('status')
+
+    function showStatus(text, isError) {
+      status.textContent = text
+      status.classList.toggle('error', Boolean(isError))
+    }
+
+    /** 打开页面时读回已保存的备忘。 */
+    async function load() {
+      try {
+        const value = await api('GET', 'memo')
+        memo.value = value ? value.text : ''
+      } catch (err) {
+        showStatus(err.message, true)
+      }
+    }
+
+    /** 点「保存」：整体覆盖 memo；保存中禁用按钮防重复提交。 */
+    save.addEventListener('click', async () => {
+      save.disabled = true
+      try {
+        await api('PUT', 'memo', { text: memo.value })
+        showStatus('已保存')
+      } catch (err) {
+        showStatus(err.message, true)
+      } finally {
+        save.disabled = false
+      }
+    })
+
+    load()
+  </script>
+</body>
+</html>

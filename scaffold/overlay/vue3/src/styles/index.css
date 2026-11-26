@@ -1,0 +1,10 @@
+/* 全站样式入口，main.ts 只引入本文件。新增公共皮按类别拆文件后在此 @import；窄屏规则集中一个文件放最后。 */
+@import './tokens.css';
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  color: var(--app-color-text);
+}

@@ -1,0 +1,22 @@
+[project]
+name = "__SIDECAR_NAME__"
+version = "0.1.0"
+description = "Python 侧车：承接依赖 Python 生态的能力（RAG、OCR、模型调用），由 Go 主后端拉起"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi==0.165.0",
+    "uvicorn==0.54.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.2.0",
+    "httpx2==2.16.2",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]

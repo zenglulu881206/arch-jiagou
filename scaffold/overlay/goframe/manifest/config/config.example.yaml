@@ -1,0 +1,19 @@
+# 配置示例（入库）。本机/现场真实配置复制为 config.yaml（已 gitignore），凭据不入库。
+# 部署更新：保留现场 config.yaml，按本文件深合并补缺键，不整份覆盖。
+server:
+  address: ":__APP_PORT__"
+  openapiPath: "/api.json"
+  swaggerPath: "/swagger"
+
+# 前端托管：留空 = 由 nginx 托管；单 exe 交付时填前端构建产物目录（如 resource/public/html）。
+web:
+  root: "__APP_WEBROOT__"
+
+logger:
+  level: "all"
+  stdout: true
+
+# 业务库连接。PostgreSQL：运行账号与迁移账号分开，均非超级用户；SQLite：库文件放 data/（gitignore）。
+database:
+  default:
+    link: "__DB_LINK__"
