@@ -19,10 +19,11 @@
 | `templates/AGENTS.sidecar.md` / `templates/AGENTS.light.md` | 生成侧车 / 轻后端 AGENT 时整份采用 |
 | `scaffold/overlay/**` | 只在改增量文件时读；生成时由 init.py 拷贝，不必预读 |
 | `axes.md` | 填选型表 |
+| `capabilities.md` | 访谈 N 节或项目需要合同 PDF 脱敏 / 仓储 2.5D 能力时；只读被选能力对应段落 |
 | `crypto-license.md` | 轴 11 或出图 07 |
 | `flow-family.md` | ERP/多单据链；写流程摘要进 harness |
 | `module-gold.md` | 第二域/数据范围/金样入口 |
-| `dual-source-docs.md` | ERP 双说明书；写数据 AGENT |
+| `dual-source-docs.md` | 有持久化数据项目的双说明书；写数据 AGENT、字段词典或新增字段规范 |
 | `data-protection.md` | 轴 9；写数据 AGENT 落表/ID/模式 |
 | `test-acceptance.md` | 轴 12；写测试 AGENT |
 | `extensions.md` | 根 AGENTS 演进索引行 |
@@ -47,6 +48,7 @@
 | `examples/dry-run-*` | 验收教学，非生产生成路径 |
 
 大文件策略：目标仓已有 `docs/数据库说明书.md` 等，**只 grep/读相关 §**，禁止整篇吞入上下文。
+客户已有数据库/公式/字段规范时先识别并登记实际入口，直接沿用，不创建覆盖性副本；新项目的两份说明书由 `init.py` 提供骨架。
 
 ## B. 生成的项目 harness（必须落表）
 

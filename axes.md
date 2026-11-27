@@ -16,7 +16,7 @@
 | 10 | 文档唯一入口 | PRD / 双说明书 / 金样 / 架构图 / **项目特化** 分入口；架构 Agent ≠ 特化目录 | 架构图；dual-source；module-gold；[project-specific.md](project-specific.md) | 禁平行副本；特化不进 agent/AGENTS-* |
 | 11 | 加解密与授权 | 见 crypto-license.md；后端安全韧性（越权/入参/防重放/留痕/信息收敛）见 backend-engineering §4 | 07；03 | 分场景选型；鉴权后端强制双闸 |
 | 12 | 验收与研发流程 | 真实交互、多帐核对、完成审查、log；并发/幂等/越权直调/限流/慢路径/脱敏留痕纳入验收 | —；[backend-engineering.md](backend-engineering.md)；[frontend-engineering.md](frontend-engineering.md) | 测完即清；工程横切类别按链扩展 |
-| 13 | 能力装配 | 开闭已登记能力 / 不做 | 09；flow-family | 装配可裁剪讲解图与写路径；不得另起可写流程态 |
+| 13 | 能力装配 | 开闭已登记能力 / 不做；能力可来自流程装配或 [capabilities.md](capabilities.md) 技术能力库 | 09；flow-family；按能力对齐相关图 | 只登记确有需求的能力；装配可裁剪图与写路径；不得另起可写流程态或把能力选中冒充已实现 |
 
 ## 选型表示例行
 

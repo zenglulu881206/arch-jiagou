@@ -5,7 +5,7 @@
 
 ## 0. 用法
 
-1. **先问分岔题，后问细节题**：按 A → M 顺序。A–I 节会改原型或技术栈，必须先定；J–M 在原型定了之后再问。
+1. **先问分岔题，后问细节题**：按 A → N 顺序。A–I 节会改原型或技术栈，必须先定；J–N 在原型定了之后再问。
 2. **预填默认值**：先按第 2 节的联动规则推出默认值，整张表预填好，只问「何时必问」命中的题，每轮 ≤5 题。用户说「按默认」就全部取默认。
 3. **一题一判定**：每题的答案都要落到「影响」列写的产物上：选型表某轴、`SELECTION.json` 某键、某份 AGENT、某幅图。答案不影响任何产物的题，删掉不问。
 4. **双写**：答案同时写进 `SELECTION.md`（13 轴：选定 / 否决 / 代价）和 `SELECTION.json`（第 3 节字段）。
@@ -147,6 +147,15 @@
 | M2 | 代码备份到哪？分支怎么管？ | GitHub 私有仓库，只保留 main + 一个过程分支 | 始终 | 研发流程 AGENT |
 | M3 | 下载走哪些镜像？ | npmmirror、goproxy.cn、清华 pip、魔塔模型、daocloud 镜像 | 始终 | `.npmrc`、`GOPROXY` |
 
+### N. 可复用技术能力
+
+按用户明确需求从 [capabilities.md](capabilities.md) 推荐；能力项与 FE/BE/DB 技术栈分别选型，不改变 13 轴总数。
+
+| # | 题 | 默认 | 何时必问 | 影响 |
+|---|---|---|---|---|
+| N1 | 合同 PDF 是否需要原件与按岗位授权的脱敏件？遮盖结果是否必须不可还原？ | 不需要 | 涉及合同、报价或对外提供 PDF 时 | `capabilities.contract_pdf_redaction`；服务端鉴权边界、文件存储和脱敏验收；详见能力库 |
+| N2 | 仓储是否需要按货架/货位可视化占用并从图形定位？是否要求真实三维仿真？ | 不需要；若只需查找优先列表/平面图 | 涉及仓库空间定位、货位操作时 | `capabilities.warehouse_2_5d`；按规模选择列表、SVG 2.5D 或另行评估 WebGL/Three.js |
+
 ## 2. 联动规则（先推默认值，再决定问哪些题）
 
 | 前提 | 推出的默认值 | 依据 |
@@ -192,6 +201,7 @@
   "clients": { "pc": true, "mobile": "h5", "device": [], "browser_min": "chrome-109" },
   "license": { "enabled": true, "bind": "machine", "expire": true, "modules": false, "issuer": "admin" },
   "ai": { "enabled": false, "mode": "none", "data_egress": "aggregate-only", "rag": false, "stream": "sse" },
+  "capabilities": { "contract_pdf_redaction": false, "warehouse_2_5d": false },
   "admin_zone": true,
   "frontend": {
     "dir": "vue", "port": 5173, "create_vue": "3.24.0",
@@ -206,7 +216,7 @@
 }
 ```
 
-★ init.py 读取的键：`frontend.*`、`backend.*`、`database.engine/name/user`、`deploy.os/os_version`（Win7 校验）。旧字段 `admin_zone` 被忽略；所有项目统一生成 `admin/`，E2E 入口固定为 `admin/scripts/e2e_launch.py`。
+★ init.py 读取的键：`frontend.*`、`backend.*`、`database.engine/name/user`、`deploy.os/os_version`（Win7 校验）。`capabilities.*` 当前只用于选型文档、架构图和验收约束，不触发代码生成。旧字段 `admin_zone` 被忽略；所有项目统一生成 `admin/`，E2E 入口固定为 `admin/scripts/e2e_launch.py`。
 
 - 后端托管前端（单 exe 交付，无 nginx）：`"deploy": { …, "shape": "single-binary" }`。
 - 浏览器下限：`"clients": { …, "browser_min": "chrome-109" }` 会写进前端 `build.target`。

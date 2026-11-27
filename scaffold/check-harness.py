@@ -92,6 +92,10 @@ def check_required(root: Path, sel: dict):
         required.append("agent/AGENTS-侧车.md")
     if sel.get("light"):
         required.append("agent/AGENTS-轻后端.md")
+    if sel.get("database"):
+        doc_paths = sel.get("documentation", {})
+        required += [doc_paths.get("database", "docs/数据库说明书.md"),
+                     doc_paths.get("formulas", "docs/计算公式说明书.md")]
     if sel.get("archetype", "erp-go-vue-pg") == "erp-go-vue-pg":
         required += [f"docs/架构图/{name}" for name in DIAGRAMS]
     for rel in required:

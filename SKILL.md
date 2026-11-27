@@ -74,10 +74,11 @@ disable-model-invocation: true
 
 对 [axes.md](axes.md) 每一轴给出：**选定 / 否决项 / 代价一句**。加密见 [crypto-license.md](crypto-license.md)。
 
-若为 ERP/多单据链：必读 [flow-family.md](flow-family.md)、[module-gold.md](module-gold.md)、[dual-source-docs.md](dual-source-docs.md)、[data-protection.md](data-protection.md)、[test-acceptance.md](test-acceptance.md)；
+若项目有持久化数据：必读 [dual-source-docs.md](dual-source-docs.md)，按客户既有规范或底座模板建立唯一入口与字段词典；若为 ERP/多单据链，另读 [flow-family.md](flow-family.md)、[module-gold.md](module-gold.md)、[data-protection.md](data-protection.md)、[test-acceptance.md](test-acceptance.md)；
 有独立前端：读 [frontend-engineering.md](frontend-engineering.md)（分页 / 异步竞态 / 队列 / 鉴权态 / 防抖防重 / 缓存）；有独立后端：读 [backend-engineering.md](backend-engineering.md)（并发锁 / 负载资源 / 性能 / 对抗审查）。
 选型表轴 1/2/6/9/10/11/12 写明升格范围。**清单均为举例，按场景扩展，禁止当成封闭枚举。**
 若要做手机系统通知 / 主屏幕推送：必读 [web-push-pwa.md](web-push-pwa.md)，前后端 AGENT 写入投递总线、订阅跟账号、深链同口径；事件目录与 openPath 落项目特化，禁止把业务事件码抄进通用 AGENT。
+若用户需要合同 PDF 岗位脱敏或仓储货位空间可视化：按 [capabilities.md](capabilities.md) 推荐候选方案，选用后写入选型表、对应架构边界和验收项；能力库中的 Demo 经验不等同生产能力，且不触发 `init.py` 生成代码。
 
 完成准则：13 轴无空格；前后矛盾已消解。
 
@@ -125,13 +126,13 @@ disable-model-invocation: true
 
 始终创建 `docs/项目特化/README.md`；根 AGENTS **只链入口**，词表/ROLE 细表/脚本清单等写入特化目录（见 [project-specific.md](project-specific.md)）。
 
-ERP 类：根 AGENTS 写入**流程族 A–H 摘要**（或指针 [flow-family.md](flow-family.md)）、**双说明书入口**、**模块金样入口（可先占位）**；其余见 [extensions.md](extensions.md) 索引，勿把样板 ERP 业务词表全文打进绿场模板。
+所有有持久化数据的项目：根 AGENTS 写入双说明书唯一入口；ERP 类另写**流程族 A–H 摘要**（或指针 [flow-family.md](flow-family.md)）和**模块金样入口（可先占位）**。其余见 [extensions.md](extensions.md) 索引，勿把样板 ERP 业务词表全文打进绿场模板。
 
 ### 6.5 生成项目骨架与技术栈代码（绿场硬闸门）
 
-1. 把选型结果写成目标项目根下的 `SELECTION.json`。
-2. 在沙箱目录先跑：`python3 <skill>/scaffold/init.py --selection SELECTION.json --target <沙箱>`。它始终创建统一根目录、`admin/AGENTS.md`、浏览器验收入口和 `CLAUDE.md → AGENTS.md` 软链；已存在文件不覆盖。
-3. Agent 按模板补齐选型表、根/分层 AGENTS、架构图和项目特化文档；生成器负责目录和代码，不把丰富的项目事实伪装成静态模板。
+1. 把选型结果写成目标项目根下的 `SELECTION.json`；客户说明书非默认路径时，在 `documentation.database` / `documentation.formulas` 登记项目内相对路径。
+2. 在沙箱目录先跑：`python3 <skill>/scaffold/init.py --selection SELECTION.json --target <沙箱>`。它始终创建统一根目录、`admin/AGENTS.md`、浏览器验收入口和 `CLAUDE.md → AGENTS.md` 软链；有数据库选型时提供两份说明书骨架，已存在文件不覆盖。
+3. 客户已有说明书时登记并沿用客户文件，不以模板或 xterp 规则覆盖；其余选型表、根/分层 AGENTS、架构图和项目特化文档由 Agent 按模板补齐。
 4. 运行 `check-harness.py` 验根级目录及 Harness，再运行 `verify.py`（默认有头浏览器）验技术栈构建、测试、健康检查和浏览器冒烟。
 5. `init.py` 不覆盖已存在的前后端目录；逆向/已有仓不跑 init，只按 `scaffold/*.md` 增量表核对差异并报告。
 6. 生成后把分层 AGENT 的目录树与实物对齐（`check-harness.py` 会查）。
@@ -158,7 +159,8 @@ ERP 类：根 AGENTS 写入**流程族 A–H 摘要**（或指针 [flow-family.m
 - [ ] 数据 AGENT：模式表 + 双事实源 + ID/落表类别表 + 资产路径
 - [ ] 研发流程 AGENT：阶段表 + 访谈默认 + 文档落点 + **活文档同轮更新** + 完成审查清单
 - [ ] ERP：流程族/唯一进度事实已写入或显式「短链暂缓」
-- [ ] ERP：数据库说明书 + 公式说明书入口已登记；**开发中随改表/改算法同轮完善**（非一次生成了事）
+- [ ] 有持久化数据：数据库说明书 + 公式说明书入口已登记；**开发中随改表/改算法同轮完善**（非一次生成了事）
+- [ ] 字段命名：同一业务语义只有一个活动规范名；新增字段已查重并登记跨层映射/兼容别名
 - [ ] 有第二域或已规划：模块金样入口已登记
 - [ ] 已建 `docs/项目特化/README.md`；按需加载与文档入口已登记
 - [ ] 架构 AGENT 无大段项目词表/ROLE 细表（特化内容在项目特化目录）
@@ -178,6 +180,7 @@ ERP 类：根 AGENTS 写入**流程族 A–H 摘要**（或指针 [flow-family.m
 ### A · 架构设计（系统架构视角）
 
 - 决策轴：[axes.md](axes.md) 〔A〕
+- 可复用技术能力库：[capabilities.md](capabilities.md) 〔A〕
 - 原型：[archetypes.md](archetypes.md) 〔A〕
 - 图套装：[diagrams/README.md](diagrams/README.md) 〔A〕
 - 流程族 + 唯一进度：[flow-family.md](flow-family.md) 〔A〕

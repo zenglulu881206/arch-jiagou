@@ -273,7 +273,7 @@ def init_light(sel: dict, target: Path):
     assert_no_placeholder(root)
 
 
-def init_root(target: Path):
+def init_root(target: Path, sel: dict):
     """生成所有项目共用的根目录骨架；已存在文件一律不覆盖。"""
     directories = [
         "admin/scripts", "admin/release", "docs/架构图",
@@ -299,6 +299,16 @@ def init_root(target: Path):
             continue
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(path, dst)
+    if sel.get("database"):
+        doc_paths = sel.get("documentation", {})
+        for key, default_name in (("database", "数据库说明书.md"), ("formulas", "计算公式说明书.md")):
+            rel = Path(doc_paths.get(key, f"docs/{default_name}"))
+            if rel.is_absolute() or ".." in rel.parts:
+                sys.exit(f"documentation.{key} 必须是项目根目录内的相对路径")
+            dst = target / rel
+            if not dst.exists():
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(HERE / "templates" / default_name, dst)
     claude = target / "CLAUDE.md"
     if not claude.exists() and not claude.is_symlink():
         claude.symlink_to("AGENTS.md")
@@ -333,7 +343,7 @@ def main():
         if not shutil.which(tool):
             sys.exit(f"缺少命令 {tool}，请先安装（版本见 scaffold/*.md 基线表）")
 
-    init_root(target)
+    init_root(target, sel)
     if sel.get("frontend"):
         init_frontend(sel, target)
     if sel.get("backend"):

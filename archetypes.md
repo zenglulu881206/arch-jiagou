@@ -89,3 +89,4 @@
 5. 多租户云端 → `saas-bff-pg`，勿生搬锁机器码 license。
 6. TinyVue / TDesign：客户或既有产品线指定时用（AI 审核项目、AI 问答项目、授权签发后台用 TinyVue，Win7 内网项目用 TDesign）；否则用 Element Plus。
 7. 判定顺序与题目见 [interview.md](interview.md) 第 2 节联动规则。
+8. 合同 PDF 岗位脱敏、仓储 2.5D 货位墙等横切能力从 [capabilities.md](capabilities.md) 单独推荐；它们不构成新 archetype，也不默认生成代码。
