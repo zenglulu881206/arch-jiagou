@@ -99,7 +99,7 @@
 
 | # | 题 | 选项 / 默认 | 何时必问 | 判定与影响 | 键 |
 |---|---|---|---|---|---|
-| I1 | 要不要隔离一块开发侧自留地（打包部署、签发私钥、数据清洗、E2E 脚本），保证它不进客户运行包？ | 交付给客户要隔离；纯自用可以不隔离 | 始终 | 要隔离就生成 `admin/` 和 `admin/AGENTS.md`；运行包里没有 admin 也要能跑。Win7 内网项目的教训：项目根目录混放 Go 安装包、exe 和软著材料 | `admin_zone` |
+| I1 | 开发侧自留地有哪些职责？（打包部署、签发私钥、数据清洗、E2E 脚本） | 始终生成 `admin/`；按职责启用子目录 | 始终 | 根级结构统一包含 `admin/` 和 `admin/AGENTS.md`；部署时默认整树排除，运行包不可依赖其中资产。纯自用项目可留空，不删除统一目录 | `admin_zone`（兼容旧字段，不再控制是否生成） |
 | I2 | 旧数据清洗、预处理脚本放哪？原始文件可以改吗？ | 放在 `admin/`；原始文件只读 | F4 要迁入时 | 数据 AGENT「资产存放路径」 | — |
 
 ### J. 部署与运维
@@ -206,7 +206,7 @@
 }
 ```
 
-★ init.py 读取的键：`frontend.*`、`backend.*`、`database.engine/name/user`、`deploy.os/os_version`（Win7 校验）、`admin_zone`（决定验收入口放 `admin/scripts/` 还是 `scripts/e2e/`）。
+★ init.py 读取的键：`frontend.*`、`backend.*`、`database.engine/name/user`、`deploy.os/os_version`（Win7 校验）。旧字段 `admin_zone` 被忽略；所有项目统一生成 `admin/`，E2E 入口固定为 `admin/scripts/e2e_launch.py`。
 
 - 后端托管前端（单 exe 交付，无 nginx）：`"deploy": { …, "shape": "single-binary" }`。
 - 浏览器下限：`"clients": { …, "browser_min": "chrome-109" }` 会写进前端 `build.target`。

@@ -5,7 +5,7 @@ harness 机器自检：把 SKILL.md 第 7 步能机器判定的项变成脚本�
 用法：python3 check-harness.py --target <项目根目录> [--selection SELECTION.json]
 
 检查项：
-1. 必备文件齐全（按 SELECTION 判断前端/后端/架构图九幅）。
+1. 必备根级骨架目录、文件齐全（按 SELECTION 判断前端/后端/架构图九幅）。
 2. 文档无残留占位符 {{…}} / __XXX__。
 3. 根 AGENTS.md 第一章是「0. 按需加载」，链到架构图；必须存在 agent/AGENTS-继承准则.md（§2/§3/§4 全文）并在根登记。
 4. 分层 AGENT 含对应模板的全部二级标题（模板是唯一标准，禁止缩成摘要）。
@@ -81,7 +81,8 @@ def harness_docs(root: Path):
 
 def check_required(root: Path, sel: dict):
     required = ["AGENTS.md", "SELECTION.md", "docs/项目特化/README.md", "docs/架构图/README.md",
-                "agent/AGENTS-继承准则.md",
+                "admin/scripts/e2e_launch.py",
+                "agent/AGENTS-继承准则.md", "admin/AGENTS.md",
                 "agent/AGENTS-数据.md", "agent/AGENTS-测试.md", "agent/AGENTS-研发流程.md"]
     if sel.get("frontend"):
         required.append("agent/AGENTS-前端.md")
@@ -96,6 +97,13 @@ def check_required(root: Path, sel: dict):
     for rel in required:
         if not (root / rel).exists():
             fail(f"[必备文件] 缺 {rel}")
+    directories = [
+        "admin/scripts", "admin/release", "docs/架构图", "docs/PRD及测试用例",
+        "docs/项目特化", "docs/旧低代码系统调研记录", "agent", "log", "scripts", "tests",
+    ]
+    for rel in directories:
+        if not (root / rel).is_dir():
+            fail(f"[根目录骨架] 缺目录 {rel}/")
 
 
 def check_placeholders(root: Path):

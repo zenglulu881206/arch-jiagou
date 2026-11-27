@@ -64,9 +64,9 @@ def call_json(method: str, url: str, body=None):
 
 
 def open_page_factory(sel: dict, target: Path):
-    """取项目统一浏览器入口 e2e_launch.open_page（目录规则同 init.py e2e_dir）。"""
+    """取项目统一浏览器入口 admin/scripts/e2e_launch.py。"""
     sys.dont_write_bytecode = True
-    e2e = "admin/scripts" if sel.get("admin_zone", True) else "scripts/e2e"
+    e2e = "admin/scripts"
     sys.path.insert(0, str(target / e2e))
     from e2e_launch import open_page
     return open_page

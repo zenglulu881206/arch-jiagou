@@ -19,7 +19,7 @@
 
 ## 绿场 vs 逆向
 
-- 绿场：代码脚手架由 `scaffold/init.py` 生成（官方 init + 增量，明细见 `scaffold/vue3.md`、`scaffold/goframe.md`），`scaffold/verify.py` 通过才算可用；测试脚本目录、PRD 目录一并预留。
+- 绿场：`scaffold/init.py` 先生成统一根骨架（见 `scaffold/root.md`），再按已支持技术栈运行官方 init + overlay（见 `scaffold/vue3.md`、`scaffold/goframe.md` 等）；`check-harness.py` 验根级/文档契约，`verify.py` 验代码可用。无 adapter 的原型只交付根骨架与文档并明确标注未支持生成。
 - 深度由 `scaffold/check-harness.py` 机器检查：分层 AGENT 必须含对应模板全部二级标题。
 - 逆向：以实仓核对；多出的目录/帐种/阶段须补进 AGENT。
 

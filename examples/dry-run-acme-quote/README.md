@@ -17,7 +17,6 @@ S=~/.agents/skills/arch-jiagou
 T=/tmp/ah-sandbox/acme-quote
 python3 $S/scaffold/init.py --selection $S/examples/dry-run-acme-quote/SELECTION.json --target $T
 cp -R $S/examples/dry-run-acme-quote/{AGENTS.md,SELECTION.md,SELECTION.json,agent,docs} $T/
-cp $S/examples/dry-run-acme-quote/admin/AGENTS.md $T/admin/
 python3 $S/scaffold/check-harness.py --target $T
 python3 $S/scaffold/verify.py --selection $T/SELECTION.json --target $T
 ```

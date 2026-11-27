@@ -37,13 +37,13 @@ disable-model-invocation: true
 
 ## 产物（缺一不可）
 
-默认五类一并交付（架构图、harness、代码脚手架不可缺；特化入口可先空索引）：
+绿场默认交付选型、完整根级骨架、Harness、架构图和技术栈代码脚手架。根级骨架对所有原型固定；技术栈代码仅在有对应 adapter 时可运行生成，未支持的原型必须明确标注「仅方案，未支持生成」，不得把文档方案说成可运行脚手架。
 
 1. **选型表**：13 轴每轴唯一选定 + 一句代价/否决（见 [axes.md](axes.md)）；同时输出 `SELECTION.json` 供脚手架脚本读取（字段见 [interview.md](interview.md) D 节）
 2. **标准架构图**：写入目标项目 `docs/架构图/`（见 [diagrams/README.md](diagrams/README.md)）
-3. **Agent Harness**：根 `AGENTS.md` + 按需 `agent/AGENTS-*.md` / `admin/AGENTS.md`（见 [templates/](templates/)）
+3. **Agent Harness**：根 `AGENTS.md` + 按需 `agent/AGENTS-*.md` + 必备 `admin/AGENTS.md`（见 [templates/](templates/)）
 4. **项目特化入口（与架构 Agent 隔离）**：`docs/项目特化/README.md`（见 [project-specific.md](project-specific.md)）——只登记/索引，**禁止**把特化正文写入架构 AGENT
-5. **代码脚手架**：官方 init 基线 + 经验增量，由 [scaffold/init.py](scaffold/init.py) 生成、[scaffold/verify.py](scaffold/verify.py) 验收（见 [scaffold/vue3.md](scaffold/vue3.md)、[scaffold/goframe.md](scaffold/goframe.md)、[scaffold/python-sidecar.md](scaffold/python-sidecar.md)、[scaffold/light-python.md](scaffold/light-python.md)）
+5. **项目骨架与代码脚手架**：`init.py` 始终先生成统一根目录（`admin/`、`docs/`、`log/`、`scripts/`、`tests/`），再按选型运行已支持技术栈的官方 init + overlay；各栈由独立 adapter 定义。`verify.py` 验代码运行，`check-harness.py` 验目录与文档契约。详见 [scaffold/root.md](scaffold/root.md) 与对应栈说明。
 
 
 ## 按需读取（硬闸门）
@@ -113,7 +113,7 @@ disable-model-invocation: true
 | `agent/AGENTS-数据.md` | 有持久化库 |
 | `agent/AGENTS-测试.md` | 始终 |
 | `agent/AGENTS-研发流程.md` | 始终 |
-| `admin/AGENTS.md` | 有开发自留地/签发/清洗 |
+| `admin/AGENTS.md` | **始终**；开发侧自留地根约束（目录可留空，但运行包必须排除） |
 | `docs/项目特化/README.md` | **始终**（可先空表）；与架构 AGENT 隔离 |
 
 分层 AGENT 深度见 [scaffold.md](scaffold.md)：**前端/后端/测试/数据/研发流程**均须整份采用对应模板（目录或类别表 + 存放路径 + 禁令），禁止缩成摘要。前端另须含工程横切表（见 [frontend-engineering.md](frontend-engineering.md)），后端另须含工程横切表（见 [backend-engineering.md](backend-engineering.md)）。
@@ -127,13 +127,14 @@ disable-model-invocation: true
 
 ERP 类：根 AGENTS 写入**流程族 A–H 摘要**（或指针 [flow-family.md](flow-family.md)）、**双说明书入口**、**模块金样入口（可先占位）**；其余见 [extensions.md](extensions.md) 索引，勿把样板 ERP 业务词表全文打进绿场模板。
 
-### 6.5 生成代码脚手架（绿场硬闸门）
+### 6.5 生成项目骨架与技术栈代码（绿场硬闸门）
 
 1. 把选型结果写成目标项目根下的 `SELECTION.json`。
-2. 在沙箱目录先跑：`python3 <skill>/scaffold/init.py --selection SELECTION.json --target <沙箱>`，再跑 `verify.py`（默认有头浏览器）；通过后再对真实目标目录执行。
-3. `init.py` 同时在项目根建 `admin/scripts/e2e_launch.py`（浏览器验收唯一入口）和 `CLAUDE.md → AGENTS.md` 软链，已存在则不动。
-4. `init.py` 不覆盖已存在的前后端目录；逆向/已有仓不跑 init，只按 `scaffold/*.md` 增量表核对差异并报告。
-5. 生成后把分层 AGENT 的目录树与实物对齐（`check-harness.py` 会查）。
+2. 在沙箱目录先跑：`python3 <skill>/scaffold/init.py --selection SELECTION.json --target <沙箱>`。它始终创建统一根目录、`admin/AGENTS.md`、浏览器验收入口和 `CLAUDE.md → AGENTS.md` 软链；已存在文件不覆盖。
+3. Agent 按模板补齐选型表、根/分层 AGENTS、架构图和项目特化文档；生成器负责目录和代码，不把丰富的项目事实伪装成静态模板。
+4. 运行 `check-harness.py` 验根级目录及 Harness，再运行 `verify.py`（默认有头浏览器）验技术栈构建、测试、健康检查和浏览器冒烟。
+5. `init.py` 不覆盖已存在的前后端目录；逆向/已有仓不跑 init，只按 `scaffold/*.md` 增量表核对差异并报告。
+6. 生成后把分层 AGENT 的目录树与实物对齐（`check-harness.py` 会查）。
 
 完成准则：`verify.py` 退出码 0（构建、单测、健康检查、浏览器冒烟全过）。
 
@@ -142,7 +143,8 @@ ERP 类：根 AGENTS 写入**流程族 A–H 摘要**（或指针 [flow-family.m
 先跑 `python3 <skill>/scaffold/check-harness.py --target <项目根> --render`，退出码 0 才进入下列人工项；脚本已覆盖的项不再人工打勾。`--render` 用真实 mermaid 在浏览器里渲染每一块架构图，语法错误逐条报出。
 
 - [ ] 选型表 13 轴填齐；`SELECTION.json` 已生成
-- [ ] `verify.py` 通过（绿场）；`check-harness.py` 通过
+- [ ] `check-harness.py` 根级骨架与 Harness 检查通过；有受支持技术 adapter 时 `verify.py` 通过
+- [ ] 未支持的技术栈明确标「仅方案，未支持生成/运行验证」；不得假报脚手架可用
 - [ ] **架构图目录齐**：必出齐全或 N/A 有理由；无残留 `{{`；Mermaid 可渲染
 - [ ] **架构图质量**：索引状态诚实；未把 `测试骨架`/`骨架` 写成「全部通过」；生产开发须持续推到 `与现状一致`
 - [ ] 根 AGENTS 链到架构图索引；活文档规则已登记（见 living-docs）
@@ -165,7 +167,7 @@ ERP 类：根 AGENTS 写入**流程族 A–H 摘要**（或指针 [flow-family.m
 
 ## 分支
 
-- **绿场**：五类产物全部新建；代码脚手架走 init.py。
+- **绿场**：统一根级骨架、五类产物全部新建；受支持技术栈走对应 init adapter，未支持栈不得伪称可运行。
 - **逆向（已有仓）**：读现有 AGENT/目录/依赖 → 填表 → 出图 → diff harness；默认不覆盖。
 - **增量**：只改声明要动的轴与对应图，其余不动。
 
@@ -195,7 +197,7 @@ ERP 类：根 AGENTS 写入**流程族 A–H 摘要**（或指针 [flow-family.m
 ### B · Agent Harness 工程（Agent 对话执行视角）
 
 - 分层 AGENT 深度门槛：[scaffold.md](scaffold.md) 〔B〕
-- 代码脚手架（官方 init + 增量）：[scaffold/vue3.md](scaffold/vue3.md)、[scaffold/goframe.md](scaffold/goframe.md)、[scaffold/python-sidecar.md](scaffold/python-sidecar.md)、[scaffold/light-python.md](scaffold/light-python.md)、`scaffold/init.py`、`scaffold/verify.py` 〔A/B〕
+- 项目根骨架与代码脚手架（统一目录 + 按栈官方 init + 增量）：[scaffold/root.md](scaffold/root.md)、[scaffold/vue3.md](scaffold/vue3.md)、[scaffold/goframe.md](scaffold/goframe.md)、[scaffold/python-sidecar.md](scaffold/python-sidecar.md)、[scaffold/light-python.md](scaffold/light-python.md)、`scaffold/init.py`、`scaffold/verify.py` 〔A/B〕
 - 机器自检：`scaffold/check-harness.py` 〔B〕
 - 选型访谈题库：[interview.md](interview.md) 〔A〕
 - 按需加载：[progressive-load.md](progressive-load.md) 〔B〕

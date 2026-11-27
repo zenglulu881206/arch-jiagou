@@ -4,11 +4,11 @@
 
 用法：python3 init.py --selection SELECTION.json --target <项目根目录>
 
-步骤（与 scaffold/vue3.md、goframe.md、python-sidecar.md、light-python.md 的三张表一一对应）：
-1. 跑官方 init（create-vue / gf init / python -m venv），版本取 SELECTION.json。
-2. 按「删改表」删除官方示例。
-3. 拷贝 overlay（增量），替换 __XXX__ 占位符。
-4. 走国内镜像装依赖，跑官方格式化。
+步骤：
+1. 创建统一根目录和通用入口。
+2. 跑选中技术栈的官方 init，版本取 SELECTION.json。
+3. 按栈说明删改官方示例，拷贝 overlay 并替换 __XXX__ 占位符。
+4. 走国内镜像装依赖，跑格式化和静态检查。
 
 不覆盖：目标前端/后端目录已存在时直接退出，由人先确认。
 """
@@ -110,11 +110,6 @@ def build_target(sel: dict) -> str:
     if m:
         return f"['chrome{m.group(1)}', 'edge{m.group(1)}']"
     return "'baseline-widely-available'"
-
-
-def e2e_dir(sel: dict) -> str:
-    """浏览器验收入口目录：有开发自留地放 admin/scripts，否则放 scripts/e2e。verify.py 用同一规则。"""
-    return "admin/scripts" if sel.get("admin_zone", True) else "scripts/e2e"
 
 
 def check_selection(sel: dict):
@@ -278,15 +273,27 @@ def init_light(sel: dict, target: Path):
     assert_no_placeholder(root)
 
 
-def init_root(sel: dict, target: Path):
-    """项目根增量：浏览器验收入口（有自留地放 admin/，否则放 scripts/e2e/）；CLAUDE.md 软链到 AGENTS.md。已存在的文件一律不动。"""
+def init_root(target: Path):
+    """生成所有项目共用的根目录骨架；已存在文件一律不覆盖。"""
+    directories = [
+        "admin/scripts", "admin/release", "docs/架构图",
+        "docs/PRD及测试用例", "docs/项目特化", "docs/旧低代码系统调研记录",
+        "agent", "log", "scripts", "tests",
+    ]
+    for rel in directories:
+        path = target / rel
+        path.mkdir(parents=True, exist_ok=True)
+        marker = path / ".gitkeep"
+        if not marker.exists():
+            marker.touch()
+
+    admin_agents = target / "admin/AGENTS.md"
+    if not admin_agents.exists():
+        shutil.copy2(HERE / "templates/AGENTS.admin.md", admin_agents)
+
     src_root = OVERLAY / "root"
     for path in src_root.rglob("*"):
         rel = path.relative_to(src_root)
-        if not sel.get("admin_zone", True):
-            if rel.parts[0] != "admin" or rel.name == "README.md":
-                continue
-            rel = Path(e2e_dir(sel)) / rel.name
         dst = target / rel
         if path.is_dir() or dst.exists():
             continue
@@ -298,7 +305,7 @@ def init_root(sel: dict, target: Path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="官方 init + 经验增量 生成项目脚手架")
+    parser = argparse.ArgumentParser(description="统一根目录骨架 + 技术栈官方 init + 经验增量")
     parser.add_argument("--selection", required=True, help="选型结果 SELECTION.json")
     parser.add_argument("--target", required=True, help="项目根目录（可已存在，但前后端子目录不得存在）")
     args = parser.parse_args()
@@ -326,6 +333,7 @@ def main():
         if not shutil.which(tool):
             sys.exit(f"缺少命令 {tool}，请先安装（版本见 scaffold/*.md 基线表）")
 
+    init_root(target)
     if sel.get("frontend"):
         init_frontend(sel, target)
     if sel.get("backend"):
@@ -334,7 +342,6 @@ def main():
         init_sidecar(sel, target)
     if sel.get("light"):
         init_light(sel, target)
-    init_root(sel, target)
     print("脚手架生成完成；下一步运行 verify.py 验收。")
 
 

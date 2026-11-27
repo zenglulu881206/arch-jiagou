@@ -14,6 +14,7 @@
 | `archetypes.md` | 定场景 / 锁原型 |
 | `interview.md` | 第 2 步访谈；写 SELECTION.json 时 |
 | `scaffold/vue3.md` / `scaffold/goframe.md` | 第 6.5 步生成脚手架；写前后端 AGENT 目录树时 |
+| `scaffold/root.md` | 第 6.5 步生成或审查统一根级目录骨架时 |
 | `scaffold/python-sidecar.md` / `scaffold/light-python.md` | 开侧车或选轻后端原型时；写侧车 / 轻后端 AGENT 时 |
 | `templates/AGENTS.sidecar.md` / `templates/AGENTS.light.md` | 生成侧车 / 轻后端 AGENT 时整份采用 |
 | `scaffold/overlay/**` | 只在改增量文件时读；生成时由 init.py 拷贝，不必预读 |
